@@ -45,9 +45,9 @@
 #define LED_FLICKER()
 #endif
 
-volatile uint8_t i2c_update = 0;
+volatile uint16_t i2c_update = 0;
 volatile uint8_t i2c_state = 0;
-volatile uint8_t i2c_offset = 0;
+volatile uint16_t i2c_offset = 0;
 
 /* USI i2c Slave State Machine
  * ===========================
@@ -285,6 +285,9 @@ uint8_t i2c_check_stop()
 		if (tmp & (1 << USIPF)) {
 			i2c_state = I2C_STATE_IDLE;
 			ret = i2c_update;
+			if (i2c_update > 255 ){
+				ret = 255;
+			}
 			i2c_update = 0;
 		}
 		sei();
